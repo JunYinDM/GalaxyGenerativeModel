@@ -1,25 +1,30 @@
-def to_img(x):
-    x = x.view(x.size(0), 1, 96, 96)
-    return x
-
-num_epochs =1000
-batch_size = 64
-learning_rate = 1e-4
+import torch
+from torch.autograd import Variable
+from torch.utils.data import Dataset , DataLoader
+import h5py
+import numpy as np
 
 
-def plot_sample_img(img, name):
-    img = img.view(1, 96, 96)
-    save_image(img, './sample_{}.png'.format(name))
 
 
-def min_max_normalization(tensor, min_value, max_value):
-    min_tensor = tensor.min()
-    tensor = (tensor - min_tensor)
-    max_tensor = tensor.max()
-    tensor = tensor / max_tensor
-    tensor = tensor * (max_value - min_value) + min_value
-    return tensor
+class gDataset(Dataset):
+    'Characterizes a dataset for PyTorch'
 
+    def __init__(self):
+                
+        h5 = h5py.File('galaxy.h5','r')
+        image = h5['img'][:]
+        h5.close()
+        
+        image.astype('float32')
+        self.len = image.shape[0]
+        self.img = torch.from_numpy(image[:])
+        
 
-def tensor_round(tensor):
-    return torch.round(tensor)
+    def __len__(self):
+        return self.len
+    
+    
+    def __getitem__(self, index):
+        return self.img[index]
+    
