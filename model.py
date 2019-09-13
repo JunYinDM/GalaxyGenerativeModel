@@ -1,3 +1,29 @@
+from __future__ import print_function
+
+import os
+
+import torch
+from torch import nn
+from torch.autograd import Variable
+from torch.utils.data import Dataset , DataLoader
+from torchvision import transforms
+from torchvision.utils import save_image
+import sys
+import glob
+import h5py
+import numpy as np
+from torch.utils.data import Dataset , DataLoader
+
+
+import math
+import torch.optim as optim
+import torch.nn.functional as F
+import torch.utils.model_zoo as model_zoo
+from tqdm import tqdm
+
+
+
+
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
     'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
@@ -289,4 +315,64 @@ class ConvNet(nn.Module):
 
     def forward(self, x):
         return self.nn(x)    
+    
+    
+    
+    
+class autoencoder_0(nn.Module):
+    def __init__(self):
+        super(autoencoder, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(96 * 96, 256),
+            nn.ReLU(True),
+            nn.Linear(256, 64),
+            nn.ReLU(True),
+
+            nn.Linear(64, 10),
+            nn.ReLU(True))
+        
+        self.decoder = nn.Sequential(
+            nn.Linear(10, 64),
+            nn.ReLU(True),
+            nn.Linear(64, 256),
+            nn.ReLU(True),
+            nn.Linear(256, 96 * 96),
+            nn.Sigmoid())
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+    
+    
+class autoencoder_1(nn.Module):
+    def __init__(self):
+        super(autoencoder, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 16, 3, stride=3, padding=1),  # b, 16, 10, 10
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=2),  # b, 16, 5, 5
+            nn.Conv2d(16, 8, 3, stride=2, padding=1),  # b, 8, 3, 3
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=1)  # b, 8, 2, 2
+        )
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(8, 16, 3, stride=2),  # b, 16, 5, 5
+            nn.ReLU(True),
+            nn.ConvTranspose2d(16, 8, 5, stride=3, padding=1),  # b, 8, 15, 15
+            nn.ReLU(True),
+            nn.ConvTranspose2d(8, 1, 10, stride=2, padding=1),  # b, 1, 28, 28
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+
+
+    
+
+    
+
 
