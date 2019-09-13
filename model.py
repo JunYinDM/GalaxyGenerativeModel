@@ -318,7 +318,7 @@ class ConvNet(nn.Module):
     
     
     
-    
+# fully connected     
 class autoencoder_0(nn.Module):
     def __init__(self):
         super(autoencoder, self).__init__()
@@ -344,7 +344,8 @@ class autoencoder_0(nn.Module):
         x = self.decoder(x)
         return x
     
-    
+
+# conv
 class autoencoder_1(nn.Module):
     def __init__(self):
         super(autoencoder, self).__init__()
@@ -373,9 +374,9 @@ class autoencoder_1(nn.Module):
     
     
   
+ #conv with latent dim = 9 
 
-
- class autoencoder(nn.Module):
+class autoencoder_2(nn.Module):
     def __init__(self):
         super(autoencoder, self).__init__()
         self.encoder = nn.Sequential(
