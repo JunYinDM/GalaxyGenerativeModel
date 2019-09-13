@@ -28,3 +28,48 @@ class gDataset(Dataset):
     def __getitem__(self, index):
         return self.img[index]
     
+    
+    
+class trainDataset(Dataset):
+    'Characterizes a dataset for PyTorch'
+
+    def __init__(self):
+                
+        h5 = h5py.File('train.h5','r')
+        image = h5['img'][:]
+        h5.close()
+        
+        image.astype('float32')
+        self.len = image.shape[0]
+        self.img = torch.from_numpy(image[:])
+        
+
+    def __len__(self):
+        return self.len
+    
+    
+    def __getitem__(self, index):
+        return self.img[index]
+
+    
+class testDataset(Dataset):
+    'Characterizes a dataset for PyTorch'
+
+    def __init__(self):
+                
+        h5 = h5py.File('test.h5','r')
+        image = h5['img'][:]
+        h5.close()
+        
+        image.astype('float32')
+        self.len = image.shape[0]
+        self.img = torch.from_numpy(image[:])
+        
+
+    def __len__(self):
+        return self.len
+    
+    
+    def __getitem__(self, index):
+        return self.img[index]    
+    
