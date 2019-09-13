@@ -369,6 +369,53 @@ class autoencoder_1(nn.Module):
         x = self.encoder(x)
         x = self.decoder(x)
         return x
+    
+    
+    
+  
+
+
+ class autoencoder(nn.Module):
+    def __init__(self):
+        super(autoencoder, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 16, 3, stride=3, padding=1),  # b, 16, 28, 28
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=2),  # b, 16, 13, 13
+            
+            nn.Conv2d(16, 8, 3, stride=2, padding=1),  # b, 8, 7, 7
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=1),  # b, 8, 6, 6
+            
+            nn.Conv2d(8, 2, 3, stride=1, padding=1),  # b, 2, 6, 6
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=1),  # b, 2, 5, 5 
+            
+            nn.Conv2d(2, 1, 3, stride=2, padding=1),  # b, 1, 3, 3
+            nn.ReLU(True)
+        )
+        self.decoder = nn.Sequential(
+            
+            nn.ConvTranspose2d(1, 2, 3, stride=1, padding =1 ),  # b, 2, 
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(2, 8, 3, stride=1),  # b, 8, 
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(8, 16, 3, stride=2),  # b, 16,  
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(16, 8, 2, stride=3),  # b, 8,
+            nn.ReLU(True),
+            nn.ConvTranspose2d(8, 1, 3, stride=3),  # b, 1, 96, 96
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+
 
     
 
