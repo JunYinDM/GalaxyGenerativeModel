@@ -420,6 +420,44 @@ class autoencoder_2(nn.Module):
 
     
 
+class autoencoder_3(nn.Module):
+    def __init__(self):
+        super(autoencoder_3, self).__init__()     # 1, 96, 96 
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 4, 3, stride=3 ),  # 4, 32, 32, 
+            nn.ReLU(True),
+            
+            nn.Conv2d(4, 8, 3, stride=3, padding=2),  # 8, 12 , 12 
+            nn.ReLU(True),
+            
+            nn.Conv2d(8, 4, 3, stride=3),  #  4, 4 ,4 
+            nn.ReLU(True),
+            
+            nn.Conv2d(4, 1, 2, stride=2, padding=1),  # 1, 3, 3 
+            nn.ReLU(True)
+        )
+        self.decoder = nn.Sequential(
+            
+            nn.ConvTranspose2d(1, 2, 3, stride=1, padding =1 ),  # b, 2, 
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(2, 4, 3, stride=1),  # b, 8, 
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(4, 8, 3, stride=2),  # b, 16,  
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(8, 4, 2, stride=3),  # b, 8,
+            nn.ReLU(True),
+            nn.ConvTranspose2d(4, 1, 3, stride=3),  # b, 1, 96, 96
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+
     
 
 
