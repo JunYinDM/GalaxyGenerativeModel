@@ -557,6 +557,8 @@ class autoencoder_5(nn.Module):
 
 class autoencoder_6(nn.Module):   # with learning rate 1e4, results @'gal_img/sc52_x_num.pt'
     def __init__(self):            # round -- very nice, very elliptical --fails at sometime 
+                                    # although loss doesn't seem decrease much, but res plot get obviously better along training 
+        
         super(autoencoder_6, self).__init__()
         self.encoder = nn.Sequential(
             nn.Conv2d(1, 64, 3, stride=3, padding=1),  
@@ -600,6 +602,9 @@ class autoencoder_6(nn.Module):   # with learning rate 1e4, results @'gal_img/sc
 
 
 
+    
+   #----
+# sc62 has great results! it's with L1loss 
 
 
 
