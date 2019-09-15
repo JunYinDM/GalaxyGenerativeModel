@@ -590,7 +590,7 @@ class autoencoder_6(nn.Module):   # with learning rate 1e4, results @'gal_img/sc
 
                         
             nn.ConvTranspose2d(32, 1, 4, stride=2),  # b, 8, 56， 56 
-            nn.Sigmoid()
+        #    nn.Sigmoid()
 
 
         )
