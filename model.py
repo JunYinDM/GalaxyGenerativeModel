@@ -509,11 +509,6 @@ class autoencoder_4(nn.Module):  # modified in the meeting with Pavlos
   ########### the above model is for data: galaxy.h5 with dim 10,000 * 96 * 96   
 
 
-
-
-
-
-
 class autoencoder_5(nn.Module):
     def __init__(self):
         super(autoencoder_5, self).__init__()
@@ -534,23 +529,32 @@ class autoencoder_5(nn.Module):
             nn.ReLU(True)
         )
         self.decoder = nn.Sequential(
-
+            
+            
             nn.ConvTranspose2d(1, 2, 3, stride=2 ),  # b, 2, 7 , 7 
             nn.ReLU(True),
-
+          
             nn.ConvTranspose2d(2, 8, 3, stride=2),  # b, 8, 15, 15
             nn.ReLU(True),
-            
-            nn.ConvTranspose2d(8, 4, 3, stride=2, padding =2 ),  # b, 16,  31， 31
+
+            nn.ConvTranspose2d(8, 4, 3, stride=2, padding =2 ),  # b, 16,  27， 27
             nn.ReLU(True),
-                    
+
                         
-            nn.ConvTranspose2d(4, 1, 4, stride=2),  # b, 8, 47， 47 
-            nn.ReLU(True),
+            nn.ConvTranspose2d(4, 1, 4, stride=2),  # b, 8, 56， 56 
+            nn.Sigmoid()
+
+
         )
 
     def forward(self, x):
         x = self.encoder(x)
         x = self.decoder(x)
         return x
+
+
+
+
+
+
 
