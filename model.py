@@ -406,7 +406,7 @@ class autoencoder_2(nn.Module):
             nn.ConvTranspose2d(8, 16, 3, stride=2),  # b, 16,  
             nn.ReLU(True),
             
-            nn.ConvTranspose2d(16, 8, 2, stride=3),  # b, 8,
+            nn.ConvTranspose2d(16, 8, 3, stride=3),  # b, 8,
             nn.ReLU(True),
             nn.ConvTranspose2d(8, 1, 3, stride=3),  # b, 1, 96, 96
             nn.Sigmoid()
@@ -459,5 +459,98 @@ class autoencoder_3(nn.Module):
         return x
 
     
+class autoencoder_4(nn.Module):  # modified in the meeting with Pavlos 
+    def __init__(self):
+        super(autoencoder_4, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 16, 3, stride=3, padding=1),  
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=2), 
+            
+            nn.Conv2d(16, 8, 3, stride=2, padding=1),  
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=1),  
+            
+            nn.Conv2d(8, 2, 3, stride=1, padding=1),  # b, 2,
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=1),  # b, 2,
+            
+            nn.Conv2d(2, 1, 3, stride=2, padding=1),  # b, 1, 3, 3 
+            nn.ReLU(True)
+        )
+        self.decoder = nn.Sequential(
+            
+            nn.ConvTranspose2d(1, 2, 3, stride=1, padding =1 ),  # b, 2, 
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(2, 8, 3, stride=1),  # b, 8, 
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(8, 16, 3, stride=2),  # b, 16,  
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(16, 8, 4, stride=2, padding = 1 ),  # b, 8,
+            nn.ReLU(True),
+                       
+            nn.ConvTranspose2d(8, 4, 4, stride=2, padding = 1 ),  # b, 8,
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(4, 1, 10, stride=2),  # b, 1, 96, 96
+            nn.Sigmoid()
+        )
 
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+    
+    
+    
+  ########### the above model is for data: galaxy.h5 with dim 10,000 * 96 * 96   
+
+
+
+
+
+
+
+class autoencoder_5(nn.Module):
+    def __init__(self):
+        super(autoencoder_5, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 16, 3, stride=3, padding=1),  
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=2), 
+            
+            nn.Conv2d(16, 8, 3, stride=2, padding=1),  
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=1),  
+            
+            nn.Conv2d(8, 2, 3, stride=1, padding=1),  # b, 2,
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=1, padding =1 ),  # b, 2,
+            
+            nn.Conv2d(2, 1, 3, stride=2, padding=1),  # b, 1, 3, 3 
+            nn.ReLU(True)
+        )
+        self.decoder = nn.Sequential(
+
+            nn.ConvTranspose2d(1, 2, 3, stride=2 ),  # b, 2, 7 , 7 
+            nn.ReLU(True),
+
+            nn.ConvTranspose2d(2, 8, 3, stride=2),  # b, 8, 15, 15
+            nn.ReLU(True),
+            
+            nn.ConvTranspose2d(8, 4, 3, stride=2, padding =2 ),  # b, 16,  31， 31
+            nn.ReLU(True),
+                    
+                        
+            nn.ConvTranspose2d(4, 1, 4, stride=2),  # b, 8, 47， 47 
+            nn.ReLU(True),
+        )
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
 
