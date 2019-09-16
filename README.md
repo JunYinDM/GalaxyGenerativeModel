@@ -11,7 +11,7 @@ Branch control-space-constant control-space-constant.tar.gz -- 66 GB -- md5 eb09
 
 -2- simulate galaxy images 
 * now by GalSim
-* later will move to illustris
+* later will move to illutris
 
 
 -3- train VAE with latent space outputing physical parameters 
