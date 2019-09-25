@@ -594,6 +594,51 @@ class autoencoder_6(nn.Module):   # with learning rate 1e4, results @ gal_img/sc
 
 
 
+class autoencoder6_2(nn.Module):   # with learning rate 1e4, results @ gal_img/sc52_x_num.pt
+    def __init__(self):            # round -- very nice, very elliptical --fails at sometime 
+                                    # although loss doesn't seem decrease much, but res plot get                                         #obviously better along training 
+        
+        super(autoencoder6_2, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 64, 3, stride=3, padding=1),  
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=2), 
+            
+            nn.Conv2d(64, 128, 3, stride=2, padding=1),  
+            nn.BatchNorm2d(128), 
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=1),  
+            
+            nn.Conv2d(128, 256, 3, stride=1, padding=1),  # b, 2,
+            nn.BatchNorm2d(256), 
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=1, padding =1 ),  # b, 2,
+            
+            nn.Conv2d(256, 256, 3, stride=2, padding=1),  # b, 1, 3, 3 
+            nn.BatchNorm2d(256), 
+            nn.ReLU(True)
+        )
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(256, 128, 3, stride=2 ),  # b, 2, 7 , 7 
+            nn.BatchNorm2d(128), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(128, 64, 3, stride=2),  # b, 8, 15, 15
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 32, 3, stride=2, padding =2 ),  # b, 16,  27， 27
+            nn.BatchNorm2d(32), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(32, 1, 4, stride=2),  # b, 8, 56， 56 
+        )
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+
+
+    
 class autoencoder_666(nn.Module):   # with learning rate 1e4, results @ gal_img/sc52_x_num.pt
     def __init__(self):            # round -- very nice, very elliptical --fails at sometime 
                                     # although loss doesn't seem decrease much, but res plot get                                         #obviously better along training 
@@ -736,4 +781,68 @@ class autoencoder_11(nn.Module):   # with learning rate 1e4, results @'gal_img/s
         x = self.decoder(x)
         return x
     '''
+class autoencoder_linear(nn.Module):
+    def __init__(self):
+        super(autoencoder_linear, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(56 * 56, 256),
+            nn.ReLU(True),
+            nn.Linear(256, 9))
+        self.decoder = nn.Sequential(
+            nn.Linear(9, 256),
+            nn.ReLU(True),
+            nn.Linear(256, 56 * 56))
 
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+    
+    
+class autoencoder_999(nn.Module):   # with learning rate 1e4, results @ gal_img/sc52_x_num.pt
+    def __init__(self):            # round -- very nice, very elliptical --fails at sometime 
+                                    # although loss doesn't seem decrease much, but res plot get                                         #obviously better along training 
+        
+        super(autoencoder_999, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 64, 3, stride=3, padding=1),  
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=2), 
+            
+            nn.Conv2d(64, 128, 3, stride=2, padding=1),  
+            nn.ReLU(True),
+            nn.BatchNorm2d(128), 
+            nn.MaxPool2d(2, stride=1),  
+            
+            nn.Conv2d(128, 256, 3, stride=1, padding=1),  # b, 2,
+            nn.ReLU(True),
+            nn.BatchNorm2d(256), 
+            nn.MaxPool2d(2, stride=1, padding =1 ),  # b, 2,
+            
+            nn.Conv2d(256, 256, 3, stride=2, padding=1),  # b, 1, 3, 3 
+            nn.BatchNorm2d(256), 
+            nn.ReLU(True)
+        )
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(256, 128, 3, stride=2 ),  # b, 2, 7 , 7 
+            nn.BatchNorm2d(128), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(128, 64, 3, stride=2),  # b, 8, 15, 15
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 32, 3, stride=2, padding =2 ),  # b, 16,  27， 27
+            nn.BatchNorm2d(32), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(32, 1, 4, stride=2),  # b, 8, 56， 56 
+        )
+
+    def forward(self, x):
+        z = self.encoder(x)
+        x = self.decoder(z)
+        return x,z
+    
+    
+        
+    
+    
