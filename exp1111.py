@@ -25,7 +25,7 @@ from torch.utils.tensorboard import SummaryWriter
 from log import Logger
 from data import gDataset, trainDataset, testDataset
 from util import r2, mse, rmse, mae, pp_mse, pp_rmse, pp_mae
-from model import autoencoder_1111
+from model import autoencoder_1111,autoencoder_999
 
 
 if not os.path.exists('./gal_img924'):
@@ -38,26 +38,26 @@ def to_img(x):   # image size 56 * 56
     return x
 
 dataset= trainDataset()
-dataloader= DataLoader(dataset=dataset, batch_size=64,shuffle=True)
+dataloader= DataLoader(dataset=dataset, batch_size=64,shuffle=True,drop_last=True)
 
 test_dataset = testDataset()
-test_dataloader= DataLoader(dataset=test_dataset, batch_size=64,shuffle=True)
+test_dataloader= DataLoader(dataset=test_dataset, batch_size=64,shuffle=True,drop_last=True)
 
 
 writer = SummaryWriter("run917/924_exp1111_1e-7",)  ################################################### change name 
 
-num_epochs =20000
+num_epochs =200000
 batch_size = 64
 learning_rate = 1e-4
 
 
 
-model = autoencoder_1111().cuda()   ############################################################## AE model 
+model = autoencoder_999().cuda()   ############################################################## AE model 
 criterion = nn.L1Loss()
 
 #scheduler 
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-5)
-scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[4000,15000,25000], gamma=0.1)
+scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[5000,20000,50000], gamma=0.1)
 
 
 
@@ -73,6 +73,7 @@ for epoch in range(num_epochs):
     test_total_mse=0.0
     
     model.train()
+    i=0
     for data in dataloader:
         img = data
         img = img.type(torch.float32)
@@ -82,14 +83,20 @@ for epoch in range(num_epochs):
         
 
         # forward
-        output, z,latent = model(img)
+        output,z = model(img)
+       # output, z,latent = model(img)
+      #  print('z size',z.size)
         
-        print(latent.size())
-        
-        label =torch.ones([64,5,1,1])
-        print(label.size())
+        latent = z.mean(axis=2, keepdim=True).mean(axis=3, keepdim=True)  # change from 256x3x3 to 256 x1 x1 
+      #  print("latent size",latent.size())
 
-        diff= (latent[:5]-label) 
+        label =torch.ones([64,5,1,1]).cuda()
+     #   print("label size",label.size())
+
+        diff= (latent[:,:5,:,:]-label) 
+     #   print(diff.size())
+    #    i=i+1
+     #   print("the",i,"th iteration")
                 
     #    print("output ",output.shape)
     ################################################## Loss function with regularizing Z ########################
@@ -98,6 +105,7 @@ for epoch in range(num_epochs):
         
         MSE_loss = nn.MSELoss()(output, img)
         batch_size = img.size(0)
+     #   print("batch_size",batch_size)
         total_loss += loss.item() * batch_size
         total_mse += MSE_loss.item() * batch_size
         num_examples += batch_size
@@ -111,7 +119,7 @@ for epoch in range(num_epochs):
         
     model.eval()
     for data in test_dataloader:
-        test_img = datax
+        test_img = data
         test_img = test_img.type(torch.float32)
         test_img = test_img.view(test_img.size(0), 1,56,56)
         test_img = test_img.cuda()
@@ -119,8 +127,10 @@ for epoch in range(num_epochs):
         
 
         # forward
-        test_output,z_output,latent_output = model(test_img)
-                
+     #   test_output,z_output,latent_output = model(test_img)
+        test_output,z_output = model(test_img)
+        
+        
        #print("output ",output.shape)
         test_loss = criterion(test_output, test_img) 
         
