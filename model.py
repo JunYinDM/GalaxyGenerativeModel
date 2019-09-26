@@ -846,3 +846,53 @@ class autoencoder_999(nn.Module):   # with learning rate 1e4, results @ gal_img/
         
     
     
+class autoencoder_1111(nn.Module):   # with learning rate 1e4, results @ gal_img/sc52_x_num.pt
+    
+    def __init__(self):            # round -- very nice, very elliptical --fails at sometime 
+                                    # although loss doesn't seem decrease much, but res plot get                                         #obviously better along training 
+        
+        super(autoencoder_1111, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 64, 3, stride=3, padding=1),  
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=2), 
+            
+            nn.Conv2d(64, 128, 3, stride=2, padding=1),  
+            nn.ReLU(True),
+            nn.BatchNorm2d(128), 
+            nn.MaxPool2d(2, stride=1),  
+            
+            nn.Conv2d(128, 256, 3, stride=1, padding=1),  # b, 2,
+            nn.ReLU(True),
+            nn.BatchNorm2d(256), 
+            nn.MaxPool2d(2, stride=1, padding =1 ),  # b, 2,
+            
+            nn.Conv2d(256, 256, 3, stride=2, padding=1),  # b, 1, 3, 3 
+            nn.BatchNorm2d(256), 
+            nn.ReLU(True), 
+            
+        )
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(256, 128, 3, stride=2 ),  # b, 2, 7 , 7 
+            nn.BatchNorm2d(128), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(128, 64, 3, stride=2),  # b, 8, 15, 15
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 32, 3, stride=2, padding =2 ),  # b, 16,  27， 27
+            nn.BatchNorm2d(32), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(32, 1, 4, stride=2),  # b, 8, 56， 56 
+        )
+
+    def forward(self, x):
+        z = self.encoder(x)
+        z = z.mean(axis=2, keepdim=True).mean(axis=3, keepdim=True)  # change from 256x3x3 to 256 x1 x1 
+        latent =z 
+        z = z.repeat(1, 1, 3, 3)
+        x = self.decoder(z)
+        return x,z,latent
+    
+
+    
