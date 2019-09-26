@@ -52,15 +52,12 @@ learning_rate = 1e-4
 
 
 
-
+model = autoencoder_1111().cuda()   ############################################################## AE model 
 criterion = nn.L1Loss()
 
 #scheduler 
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-5)
-scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[2000,7000,11000], gamma=0.1)
-
-
-
+scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[4000,15000,25000], gamma=0.1)
 
 
 
@@ -87,12 +84,12 @@ for epoch in range(num_epochs):
         # forward
         output, z,latent = model(img)
         
-        print(z.size())
+        print(latent.size())
         
-        label = torch.ones(5)
+        label =torch.ones([64,5,1,1])
         print(label.size())
 
-        diff= (z[:5]-label) 
+        diff= (latent[:5]-label) 
                 
     #    print("output ",output.shape)
     ################################################## Loss function with regularizing Z ########################
@@ -114,7 +111,7 @@ for epoch in range(num_epochs):
         
     model.eval()
     for data in test_dataloader:
-        test_img = data
+        test_img = datax
         test_img = test_img.type(torch.float32)
         test_img = test_img.view(test_img.size(0), 1,56,56)
         test_img = test_img.cuda()
