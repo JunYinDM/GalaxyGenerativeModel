@@ -31,7 +31,7 @@ for i in range(3000):
 # fixed parameters 
     image_size = 64        # n x n pixels
     pixel_scale = 0.23     # arcsec / pixel
-    random_seed = 1314662
+ #   random_seed = 1314662
     rng = galsim.BaseDeviate(random_seed+1)
     bulge_n = 3.5          # Fixed 
     psf_beta = 2       #moffat parameter 
