@@ -90,9 +90,6 @@ with h5py.File("test.h5", "w") as fnew:
     fnew.create_dataset('bulge_frac', data=bulge_frac_)
     fnew.create_dataset('gal_q', data=gal_q_)
     fnew.create_dataset('gal_beta', data=gal_beta_)
-    fnew.create_dataset('atmos_e', data=atmos_e_)
-    fnew.create_dataset('atmos_beta', data = atmos_beta_)
-    fnew.create_dataset('wcs_g1', data=wcs_g1_)
-    fnew.create_dataset('wcs_g2', data=wcs_g2_)
+
 print("yayyyyy, finish running")
 
