@@ -26,7 +26,7 @@ wcs_g1_ = np.zeros(10000)
 wcs_g2_ =np.zeros(10000)
 
 
-for i in range(3000): 
+for i in range(10000): 
 # fixed parameters 
     image_size = 64        # n x n pixels
     pixel_scale = 0.23     # arcsec / pixel
