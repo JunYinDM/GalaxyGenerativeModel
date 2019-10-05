@@ -81,7 +81,7 @@ class trainlabelDataset(Dataset):
     def __init__(self):
                 
         f = h5py.File('train.h5','r')
-        image = f['img'][:]/(10e6)
+        image = f['img'][:]/(1.5e6)    # max-min normalize the image 
         gal_flux = f['gal_flux'][:]
         bulge_re = f['bulge_re'][:]
         disk_n = f['disk_n'][:]
@@ -127,7 +127,7 @@ class testlabelDataset(Dataset):
     def __init__(self):
                 
         f= h5py.File('test.h5','r')
-        image = f['img'][:]/(10e6)
+        image = f['img'][:]/(1.5e6)  
         gal_flux = f['gal_flux'][:]
         bulge_re = f['bulge_re'][:]
         disk_n = f['disk_n'][:]
