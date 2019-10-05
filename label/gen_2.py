@@ -8,30 +8,29 @@ import h5py
 import numpy as np 
 import random 
 
-img_ = np.zeros((3000,64,64))
+img_ = np.zeros((10000,64,64))
 
-gal_flux_ = np.zeros(3000)
-bulge_re_ =np.zeros(3000)
-disk_n_ =np.zeros(3000)
-disk_r0_ = np.zeros(3000)
-bulge_frac_ =np.zeros(3000)
+gal_flux_ = np.zeros(10000)
+bulge_re_ =np.zeros(10000)
+disk_n_ =np.zeros(10000)
+disk_r0_ = np.zeros(10000)
+bulge_frac_ =np.zeros(10000)
 
     
-gal_q_ = np.zeros(3000)
-gal_beta_ = np.zeros(3000)
-atmos_e_ =np.zeros(3000)
-atmos_beta_ =np.zeros(3000)
+gal_q_ = np.zeros(10000)
+gal_beta_ = np.zeros(10000)
+atmos_e_ =np.zeros(10000)
+atmos_beta_ =np.zeros(10000)
 
-wcs_g1_ = np.zeros(3000)
-wcs_g2_ =np.zeros(3000)
-
+wcs_g1_ = np.zeros(10000)
+wcs_g2_ =np.zeros(10000)
 
 
 for i in range(3000): 
 # fixed parameters 
     image_size = 64        # n x n pixels
     pixel_scale = 0.23     # arcsec / pixel
-    random_seed = 1314662
+    random_seed = 1314663
     rng = galsim.BaseDeviate(random_seed+1)
     bulge_n = 3.5          # Fixed 
     psf_beta = 2       #moffat parameter 
