@@ -80,7 +80,7 @@ for i in range(10000):
     
     
 
-with h5py.File("test.h5", "w") as fnew:
+with h5py.File("train.h5", "w") as fnew:
     fnew.create_dataset('img', data=img_)
     fnew.create_dataset('gal_flux', data=gal_flux_)
     fnew.create_dataset('bulge_re', data=bulge_re_)
