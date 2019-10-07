@@ -81,7 +81,7 @@ class trainlabelDataset(Dataset):
     def __init__(self):
                 
         f = h5py.File('train.h5','r')
-        image = f['img'][:]/(1.5e6)    # max-min normalize the image 
+        image = f['img'][:]/(1e8)    # max-min normalize the image 
         gal_flux = f['gal_flux'][:]
         bulge_re = f['bulge_re'][:]
         disk_n = f['disk_n'][:]
@@ -101,7 +101,7 @@ class trainlabelDataset(Dataset):
         
         self.len = image.shape[0]
         self.image= torch.from_numpy(image[:])
-        self.gal_flux = torch.from_numpy(gal_flux[:])
+        self.gal_flux = torch.log(torch.from_numpy(gal_flux[:]))
         self.bulge_re = torch.from_numpy(bulge_re[:])
         self.disk_n = torch.from_numpy(disk_n[:])
         self.disk_r0 = torch.from_numpy(disk_r0[:])
@@ -127,7 +127,7 @@ class testlabelDataset(Dataset):
     def __init__(self):
                 
         f= h5py.File('test.h5','r')
-        image = f['img'][:]/(1.5e6)  
+        image = f['img'][:]/(1e8)  
         gal_flux = f['gal_flux'][:]
         bulge_re = f['bulge_re'][:]
         disk_n = f['disk_n'][:]
@@ -147,7 +147,7 @@ class testlabelDataset(Dataset):
         
         self.len = image.shape[0]
         self.image= torch.from_numpy(image[:])
-        self.gal_flux = torch.from_numpy(gal_flux[:])
+        self.gal_flux = torch.log(torch.from_numpy(gal_flux[:]))
         self.bulge_re = torch.from_numpy(bulge_re[:])
         self.disk_n = torch.from_numpy(disk_n[:])
         self.disk_r0 = torch.from_numpy(disk_r0[:])
