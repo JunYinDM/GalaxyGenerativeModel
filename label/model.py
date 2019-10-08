@@ -127,10 +127,8 @@ class autoencoder_333(nn.Module):   #
         return x,z
     
     
-  
-
-
- class vae_501(nn.Module):   # 
+    
+class vae_501(nn.Module):  
     def __init__(self):            #  1x 64 x 64 
         
         super(vae_501, self).__init__()
