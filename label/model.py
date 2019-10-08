@@ -62,7 +62,7 @@ class autoencoder_999(nn.Module):   #
             nn.BatchNorm2d(256), 
             nn.MaxPool2d(2, stride=1),  # b, 256, 14, 14 
             
-            nn.Conv2d(256, 256, 3, stride=1, padding=1),  # b, 14, 14 
+            nn.Conv2d(256, 256, 3, stride=1, padding=1),  # b,256*  14, 14 
             nn.BatchNorm2d(256), 
             nn.ReLU(True)
         )
@@ -127,6 +127,87 @@ class autoencoder_333(nn.Module):   #
         return x,z
     
     
+  
+
+
+ class vae_501(nn.Module):   # 
+    def __init__(self):            #  1x 64 x 64 
         
+        super(vae_501, self).__init__()
+        
+        self.fc11 = nn.Linear(14*14, 14)
+        self.fc12 = nn.Linear(14*14, 14)
+
+        self.fc21 = nn.Linear(14, 14*14)
+        
+        self.enc = nn.Sequential(
+            nn.Conv2d(1, 64, 3, stride=1, padding=1),  # 64 * 64 * 64  
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=2),   # 64 * 31 * 31 
+            
+            nn.Conv2d(64, 128, 3, stride=2, padding=1),  # 128 *16 * 16 
+            nn.ReLU(True),
+            nn.BatchNorm2d(128), 
+            nn.MaxPool2d(2, stride=1),  # 128 * 15 * 15 
+            
+            nn.Conv2d(128, 64, 3, stride=1, padding=1),  # b,  * 15 * 15 
+            nn.ReLU(True),
+            nn.BatchNorm2d(64), 
+            nn.MaxPool2d(2, stride=1),  # b, 256, 14, 14 
+            
+            nn.Conv2d(64, 1, 3, stride=1, padding=1),  # b, 1  x 14, 14 
+            nn.BatchNorm2d(1), 
+            nn.ReLU(True)
+        )
+        self.dec = nn.Sequential(
+            nn.ConvTranspose2d(1, 64, 3, stride=2),  # b, 2,  
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 128, 3, stride=2),  # b, 8, 55, 55 
+            nn.BatchNorm2d(128), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(128, 64, 3, stride=1),  # b, 16, 
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 1, 4, stride=1),  # b, 1,  64 x 64 
+        )
+
+        
+        
+    def encoder(self, x):
+        h1=self.enc(x)
+      #  print("h1", h1.shape)
+        h2=h1.view(-1,14*14)
+        
+        return  self.fc11(h2), self.fc12(h2)
+        
+    def reparametrize(self, mu, logvar):  # mu, sigma --> mu + sigma * N(0,1)
+        std = logvar.mul(0.5).exp_()
+        if torch.cuda.is_available():
+            eps = torch.cuda.FloatTensor(std.size()).normal_()
+        else:
+            eps = torch.FloatTensor(std.size()).normal_()
+        eps = Variable(eps)
+        return eps.mul(std).add_(mu)
+    
+        
+        
+    def decoder (self, z):
+        
+        h3= self.fc21(z)
+        h4=h3.view(-1,1,14,14)
+
+        return self.dec(h4)
+    
+    def forward(self, x):
+        mu, logvar = self.encoder(x)
+        z = self.reparametrize(mu, logvar)
+        return self.decoder(z), mu, logvar
+    
+    
+    
+    
+    
     
         
