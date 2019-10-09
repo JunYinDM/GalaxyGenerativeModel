@@ -81,15 +81,16 @@ class trainlabelDataset(Dataset):
     def __init__(self):
                 
         f = h5py.File('train.h5','r')
-        image = f['img'][:]/(1e8)    # max-min normalize the image 
-        gal_flux = f['gal_flux'][:]
+        image = f['img'][:]/(1.5e6)    # max-min normalize the image 
+        gal_flux = f['gal_flux'][:]/(1.5e6)  
         bulge_re = f['bulge_re'][:]
         disk_n = f['disk_n'][:]
         disk_r0 = f['disk_r0'][:]
         bulge_frac= f['bulge_frac'][:]
         gal_q = f['gal_q'][:]
         gal_beta = f['gal_beta'][:]
-     
+        f.close()
+        
         image.astype('float32')
         gal_flux.astype('float32')
         bulge_re.astype('float32')
@@ -127,15 +128,16 @@ class testlabelDataset(Dataset):
     def __init__(self):
                 
         f= h5py.File('test.h5','r')
-        image = f['img'][:]/(1e8)  
-        gal_flux = f['gal_flux'][:]
+        image = f['img'][:]/(1.5e6)  
+        gal_flux = f['gal_flux'][:]/(1.5e6)  
         bulge_re = f['bulge_re'][:]
         disk_n = f['disk_n'][:]
         disk_r0 = f['disk_r0'][:]
         bulge_frac= f['bulge_frac'][:]
         gal_q = f['gal_q'][:]
         gal_beta = f['gal_beta'][:]
-     
+        f.close()
+        
         image.astype('float32')
         gal_flux.astype('float32')
         bulge_re.astype('float32')

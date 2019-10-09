@@ -19,11 +19,7 @@ bulge_frac_ =np.zeros(3000)
     
 gal_q_ = np.zeros(3000)
 gal_beta_ = np.zeros(3000)
-atmos_e_ =np.zeros(3000)
-atmos_beta_ =np.zeros(3000)
 
-wcs_g1_ = np.zeros(3000)
-wcs_g2_ =np.zeros(3000)
 
 
 
