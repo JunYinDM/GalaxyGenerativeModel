@@ -116,7 +116,7 @@ class trainlabelDataset(Dataset):
     
     
     def __getitem__(self, index):
-        return self.image[index], np.asarray([self.gal_flux[index],self.bulge_re[index],self.disk_n[index],self.disk_r0[index], self.bulge_frac[index],self.gal_q[index],self.gal_beta[index]])
+        return self.image[index], np.asarray([self.gal_flux[index],self.bulge_re[index],self.disk_n[index],self.disk_r0[index], self.bulge_frac[index],self.gal_q[index],self.gal_beta[index]])/3
     
      
         
@@ -129,7 +129,7 @@ class testlabelDataset(Dataset):
                 
         f= h5py.File('test.h5','r')
         image = f['img'][:]/(1.5e6)  
-        gal_flux = f['gal_flux'][:]/(1.5e6)  
+        gal_flux = f['gal_flux'][:]/(1.5e6)
         bulge_re = f['bulge_re'][:]
         disk_n = f['disk_n'][:]
         disk_r0 = f['disk_r0'][:]
@@ -163,7 +163,7 @@ class testlabelDataset(Dataset):
     
     
     def __getitem__(self, index):
-        return self.image[index], np.asarray([self.gal_flux[index],self.bulge_re[index],self.disk_n[index],self.disk_r0[index], self.bulge_frac[index],self.gal_q[index],self.gal_beta[index]])
+        return self.image[index], np.asarray([self.gal_flux[index],self.bulge_re[index],self.disk_n[index],self.disk_r0[index], self.bulge_frac[index],self.gal_q[index],self.gal_beta[index]])/3
     
     
     
