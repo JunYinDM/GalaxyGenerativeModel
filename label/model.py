@@ -135,33 +135,36 @@ class autoencoder_333_2(nn.Module):   #
             nn.Conv2d(1, 64, 3, stride=1, padding=1),  # 64 * 64 * 64  
             nn.BatchNorm2d(64), 
             nn.ReLU(True),
-            nn.MaxPool2d(2, stride=2),   # 64 * 31 * 31 
+            nn.MaxPool2d(2, stride=2),   # 64 * 31 * 31   (31 -2)/2 +1 
             
             nn.Conv2d(64, 128, 3, stride=2, padding=1),  # 128 *16 * 16 
             nn.ReLU(True),
             nn.BatchNorm2d(128), 
             nn.MaxPool2d(2, stride=1),  # 128 * 15 * 15 
             
-            nn.Conv2d(128, 64, 3, stride=1, padding=1),  # b,  * 15 * 15 
+            nn.Conv2d(128, 64, 3, stride=1, padding=1),  # b, 64 * 15 * 15 
             nn.ReLU(True),
             nn.BatchNorm2d(64), 
-            nn.MaxPool2d(2, stride=1),  # b, 256, 14, 14 
+            nn.MaxPool2d(2, stride=1),  # b, 64, 14, 14 
             
             nn.Conv2d(64, 1, 3, stride=1, padding=1),  # b, 1  x 14, 14 
+           # nn.Linear(14*14, 49)
+
+            
         #    nn.BatchNorm2d(1), 
          #   nn.ReLU(True)
         )
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(1, 64, 3, stride=2),  # b, 2,  
+            nn.ConvTranspose2d(1, 64, 3, stride=2),  # b, 64,  
             nn.BatchNorm2d(64), 
             nn.ReLU(True),
-            nn.ConvTranspose2d(64, 128, 3, stride=2),  # b, 8, 55, 55 
+            nn.ConvTranspose2d(64, 128, 3, stride=2),  # b, 64, 55, 55 
             nn.BatchNorm2d(128), 
             nn.ReLU(True),
-            nn.ConvTranspose2d(128, 64, 3, stride=1),  # b, 16, 
+            nn.ConvTranspose2d(128, 64, 3, stride=1),  # 128, 
             nn.BatchNorm2d(64), 
             nn.ReLU(True),
-            nn.ConvTranspose2d(64, 1, 4, stride=1),  # b, 1,  
+            nn.ConvTranspose2d(64, 1, 4, stride=1),  # b, 64,  
         )
 
     def forward(self, x):
@@ -248,6 +251,104 @@ class vae_501(nn.Module):
     
     
     
-    
-    
+class autoencoder_1014(nn.Module):   # 
+    def __init__(self):            #  1x 64 x 64 
         
+        super(autoencoder_1014, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 64, 3, stride=1, padding=1),  # 64 * 64 * 64  
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=2),   # 64 * 31 * 31 
+            
+            nn.Conv2d(64, 128, 3, stride=2, padding=1),  # 128 *16 * 16 
+            nn.ReLU(True),
+            nn.BatchNorm2d(128), 
+            nn.MaxPool2d(2, stride=1),  # 128 * 15 * 15 
+            
+            nn.Conv2d(128, 64, 3, stride=1, padding=1),  # b,  * 15 * 15 
+            nn.ReLU(True),
+            nn.BatchNorm2d(64), 
+            nn.MaxPool2d(2, stride=1),  # b, 256, 14, 14 
+            
+            nn.Conv2d(64, 4, 3, stride=1, padding=1),  # b, 4  x 14, 14 
+           # nn.BatchNorm2d(1), 
+            #nn.ReLU(True)
+        )
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(4, 64, 3, stride=2),  # b, ,  
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 128, 3, stride=2),  # b, 8, 55, 55 
+            nn.BatchNorm2d(128), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(128, 64, 3, stride=1),  # b, 16, 
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 1, 4, stride=1),  # b, 1,  
+        )
+
+    def forward(self, x):
+        z = self.encoder(x)
+        x = self.decoder(z)
+        return x,z
+    
+
+    
+class autoencoder_1015(nn.Module):   # 
+    def __init__(self):            #  1x 64 x 64 
+        
+        super(autoencoder_1015, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 64, 3, stride=1, padding=1),  # 64 * 64 * 64  
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.MaxPool2d(2, stride=2),   # 64 * 31 * 31   (31 -2)/2 +1 
+            
+            nn.Conv2d(64, 128, 3, stride=2, padding=1),  # 128 *16 * 16 
+            nn.ReLU(True),
+            nn.BatchNorm2d(128), 
+            nn.MaxPool2d(2, stride=1),  # 128 * 15 * 15 
+            
+            nn.Conv2d(128, 64, 3, stride=1, padding=1),  # b, 64 * 15 * 15 
+            nn.ReLU(True),
+            nn.BatchNorm2d(64), 
+            nn.MaxPool2d(2, stride=1),  # b, 64, 14, 14 
+            
+            nn.Conv2d(64, 1, 3, stride=1, padding=1),  # b, 1  x 14, 14 
+        #    nn.Linear(14*14, 14*14)
+
+            
+        #    nn.BatchNorm2d(1), 
+         #   nn.ReLU(True)
+        )
+        
+        self.lin_1= nn.Linear(14*14, 14*14)
+        self.lin_2= nn.Linear(14*14, 14*14)
+
+
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(1, 64, 3, stride=2),  # b, 64,  
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 128, 3, stride=2),  # b, 64, 55, 55 
+            nn.BatchNorm2d(128), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(128, 64, 3, stride=1),  # 128, 
+            nn.BatchNorm2d(64), 
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 1, 4, stride=1),  # b, 64,  
+
+        )
+
+    def forward(self, x):
+        z_1 = self.encoder(x)
+        z = self.lin_1(z_1.view(z_1.size(0),14*14))
+        z_3 = self.lin_2(z)
+        
+        x=self.decoder(z_3.view(z.size(0),1,14,14))
+        return x,z   
+    
+
+    
+
