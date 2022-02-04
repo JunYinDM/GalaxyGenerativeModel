@@ -1,22 +1,3 @@
-
-
-galaxy generative models
-
--1- train auto encoder with latent dim = 9 
-
-
-Data file: 
-http://great3.jb.man.ac.uk/leaderboard/data
-Branch control-space-constant control-space-constant.tar.gz -- 66 GB -- md5 eb09e1d110a38374cca14aff468780f3.
-
--2- simulate galaxy images 
-* now by GalSim
-* later will move to illutris
-
-
--3- train VAE with latent space outputing physical parameters 
-
-* AVDA
-
+Astronomical photometric surveys routinely image billions of galaxies, and traditionally infer the parameters of a parametric model for each galaxy. This approach has served us well, but the computational expense of deriving a full posterior probability distribution function is a challenge for increasingly ambitious surveys.  In this Github directory, we demonstrate how to use deep learning methods to characterize galaxy images, training a conditional autoencoder (CAE) on mock data.  The autoencoder can reconstruct and denoise galaxy images via a latent space engineered to include semantically meaningful parameters, such as brightness, location, size, and shape. Our model recovers galaxy fluxes and shapes on mock data with a lower variance. 
 
 
